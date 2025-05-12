@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Faculty Panel</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background-color: #f0f0f0; }
+    .container { display: flex; height: 100vh; }
+    .sidebar { width: 220px; background-color: #4CAF50; padding: 20px 10px; color: white; }
+    .sidebar h2 { text-align: center; margin-bottom: 30px; }
+    .nav-link { margin: 10px 0; padding: 10px; cursor: pointer; border-radius: 4px; background-color: rgba(0,0,0,0.05); }
+    .nav-link:hover { background-color: rgba(0,0,0,0.1); }
+    .main { flex-grow: 1; padding: 20px; overflow-y: auto; }
+    .section { display: none; background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    .active { display: block; }
+    .profile-container { display: flex; gap: 20px; }
+    .profile-img { width: 120px; height: 120px; object-fit: cover; border: 2px solid #ccc; }
+    .profile-details { flex: 1; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 15px; }
+    th, td { border: 1px solid #ccc; padding: 6px; text-align: center; }
+    th { background-color: #eee; }
+    .red { background-color: red; color: white; }
+    .send-btn { margin: 5px; background: #4CAF50; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+    .chart-container { margin-top: 30px; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width:100%; height:100%; background: rgba(0,0,0,0.5); z-index: 999; justify-content: center; align-items: center; }
+    .modal-content { background: white; padding: 20px; border-radius: 10px; text-align: center; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="sidebar">
+    <h2>Faculty Panel</h2>
+    <div class="nav-link" onclick="showSection('dashboard')">Dashboard</div>
+    <div class="nav-link" onclick="openModal('classModal')">Class Performance</div>
+    <div class="nav-link" onclick="openModal('marksModal')">Add Marks</div>
+    <div class="nav-link" onclick="logout()">Logout</div>
+  </div>
+
+  <div class="main">
+    <div id="dashboard" class="section active">
+      <h3>Faculty Profile</h3>
+      <div class="profile-container">
+        <img class="profile-img" src="Faculty_pic.jpg" alt="Faculty Photo">
+        <div class="profile-details">
+          <p><strong>Staff Id:</strong> 22A91A0512</p>
+          <p><strong>Name:</strong> P. Deepthi</p>
+          <p><strong>Phone:</strong> 9876543210</p>
+          <p><strong>Email:</strong> deepthi@example.com</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="classPerformance" class="section">
+      <h3>Class Performance</h3>
+      <table id="classTable">
+        <thead>
+          <tr>
+            <th>Roll No</th><th>Name</th>
+            <th colspan="3">DLD</th><th colspan="3">Java</th><th colspan="3">Maths</th>
+            <th colspan="3">EA</th><th colspan="3">DBMS</th><th colspan="3">VEGC</th><th colspan="3">ETC</th>
+          </tr>
+          <tr>
+            <th colspan="2"></th>
+            ${['DLD','Java','Maths','EA','DBMS','VEGC','ETC'].map(() => '<th>M1</th><th>M2</th><th>Avg</th>').join('')}
+          </tr>
+        </thead>
+        <tbody id="classData"></tbody>
+      </table>
+      <div class="chart-container"><canvas id="classChart" height="300"></canvas></div>
+      <div class="chart-container"><canvas id="subjectChart" height="300"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Template -->
+<div id="classModal" class="modal">
+  <div class="modal-content">
+    <h3>Select a Class</h3>
+    <button onclick="goToClass('A')" class="send-btn">Class A</button>
+    <button onclick="goToClass('B')" class="send-btn">Class B</button>
+    <button onclick="goToClass('C')" class="send-btn">Class C</button>
+    <br><br><button onclick="closeModal('classModal')">Cancel</button>
+  </div>
+</div>
+
+<div id="marksModal" class="modal">
+  <div class="modal-content">
+    <h3>Select a Class</h3>
+    <button onclick="goToMarksClass('A')" class="send-btn">Class A</button>
+    <button onclick="goToMarksClass('B')" class="send-btn">Class B</button>
+    <button onclick="goToMarksClass('C')" class="send-btn">Class C</button>
+    <br><br><button onclick="closeModal('marksModal')">Cancel</button>
+  </div>
+</div>
+
+<script>
+  const subjects = ['DLD', 'Java', 'Maths', 'EA', 'DBMS', 'VEGC', 'ETC'];
+  const students = [];
+  const tbody = document.getElementById("classData");
+
+  function generateData() {
+    for (let i = 1; i <= 70; i++) {
+      const roll = `22A91A05${i.toString().padStart(2, '0')}`;
+      const name = `Student ${i}`;
+      const marks = subjects.map(() => {
+        let m1 = Math.floor(Math.random() * 11) + 20;
+        let m2 = Math.floor(Math.random() * 11) + 20;
+        return { mid1: m1, mid2: m2, avg: ((m1 + m2) / 2).toFixed(1) };
+      });
+      students.push({ roll, name, marks });
+    }
+  }
+
+  function drawClassTable() {
+    tbody.innerHTML = '';
+    students.forEach(s => {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${s.roll}</td><td>${s.name}</td>` +
+        s.marks.map(m =>
+          `<td class="${m.mid1 < 20 ? 'red' : ''}">${m.mid1}</td>
+           <td class="${m.mid2 < 20 ? 'red' : ''}">${m.mid2}</td>
+           <td class="${(m.mid1 < 20 || m.mid2 < 20) ? 'red' : ''}">${m.avg}</td>`
+        ).join('');
+      tbody.appendChild(row);
+    });
+    drawMainChart();
+  }
+
+  let classChart, subjectChart;
+
+  function drawMainChart() {
+    const ctx = document.getElementById("classChart").getContext("2d");
+    if (classChart) classChart.destroy();
+    const mid1 = [], mid2 = [];
+    subjects.forEach((_, i) => {
+      mid1.push((students.reduce((sum, s) => sum + s.marks[i].mid1, 0) / students.length).toFixed(2));
+      mid2.push((students.reduce((sum, s) => sum + s.marks[i].mid2, 0) / students.length).toFixed(2));
+    });
+    classChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: subjects,
+        datasets: [
+          { label: 'Mid 1 Avg', data: mid1, backgroundColor: 'orange' },
+          { label: 'Mid 2 Avg', data: mid2, backgroundColor: 'navy' }
+        ]
+      },
+      options: {
+        onClick: (e, elements) => {
+          if (elements.length > 0) drawSubjectChart(elements[0].index);
+        },
+        scales: { y: { beginAtZero: true, max: 30 } }
+      }
+    });
+  }
+
+  function drawSubjectChart(index) {
+    const ctx = document.getElementById("subjectChart").getContext("2d");
+    if (subjectChart) subjectChart.destroy();
+    subjectChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: students.map(s => s.name),
+        datasets: [
+          { label: 'Mid 1', data: students.map(s => s.marks[index].mid1), backgroundColor: 'orange' },
+          { label: 'Mid 2', data: students.map(s => s.marks[index].mid2), backgroundColor: 'navy' }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { beginAtZero: true, max: 30 } }
+      }
+    });
+  }
+
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (id === 'classPerformance') drawClassTable();
+  }
+
+  function openModal(id) {
+    document.getElementById(id).style.display = 'flex';
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+
+  function goToClass(className) {
+    closeModal('classModal');
+    if (className === 'A') {
+      window.location.href = 'http://localhost/SRP/subjectMarks.php';
+    } else {
+      alert('Navigation for Class ' + className + ' not implemented.');
+    }
+  }
+
+  function goToMarksClass(className) {
+    closeModal('marksModal');
+    if (className === 'A') {
+      window.location.href = 'http://localhost/SRP/facultyMarks.php';
+    } else {
+      alert('Marks entry for Class ' + className + ' not implemented.');
+    }
+  }
+
+  function logout() {
+    window.location.href = "LoginPage.html";
+  }
+
+  generateData();
+</script>
+</body>
+</html>

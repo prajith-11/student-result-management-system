@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Home Page</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: gold;
+      padding: 20px 10px;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    .nav-link {
+      margin: 10px 0;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      background-color: rgba(0,0,0,0.05);
+    }
+
+    .nav-link:hover {
+      background-color: rgba(0,0,0,0.1);
+    }
+
+    .main {
+      flex-grow: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .section {
+      display: none;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .active {
+      display: block;
+    }
+
+    .profile-img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border: 2px solid #ccc;
+      margin-bottom: 15px;
+    }
+
+    .profile-container {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .profile-details {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Student Panel</h2>
+    <div class="nav-link" onclick="showSection('dashboard')">Dashboard</div>
+    <div class="nav-link" onclick="window.location.href='http://localhost/SRP/studentMarks.php'">View Results</div>
+    <div class="nav-link" onclick="window.location.href='http://localhost/SRP/classMarks.php'">Class Performance</div>
+    <div class="nav-link" onclick="showSection('papers')">Question Papers</div>
+    <div class="nav-link" onclick="window.location.href = 'LoginPage.html'">Logout</div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <!-- Dashboard -->
+    <div id="dashboard" class="section active">
+      <h3>Student Profile</h3>
+      <div class="profile-container">
+        <img class="profile-img" src="Student_pic.jpg" alt="Student Photo">
+        <div class="profile-details">
+          <p><strong>Roll No:</strong> 25241A6601</p>
+          <p><strong>Name:</strong> Ansh</p>
+          <p><strong>Phone:</strong> 9876543210</p>
+          <p><strong>Email:</strong> ansh.123@example.com</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question Papers -->
+    <div id="papers" class="section">
+      <h3>Question Papers</h3>
+      <ul>
+        <li><a href="QuestionPaper.html">Digital Logic Design</a></li>
+        <li><a href="QuestionPaper.html">Java Programming</a></li>
+        <li><a href="QuestionPaper.html">Discrete Mathematics</a></li>
+        <li><a href="QuestionPaper.html">Economics and Accounting</a></li>
+        <li><a href="QuestionPaper.html">DBMS</a></li>
+        <li><a href="QuestionPaper.html">Value Ethics</a></li>
+        <li><a href="QuestionPaper.html">Effective Technical Communication</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+</script>
+</body>
+</html>

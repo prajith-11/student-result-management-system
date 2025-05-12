@@ -1,0 +1,146 @@
+/* General Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 100vh;
+    flex-direction: column;
+    overflow: hidden; /* Prevent scrollbars */
+}
+
+/* Button to open the popup (Add Details) */
+.add-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 24px;
+    padding: 10px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.add-btn:hover {
+    background-color: #45a049;
+}
+
+.add-btn:focus {
+    outline: none;
+}
+
+/* Table Styling */
+h2 {
+    margin-top: 20px;
+    padding-left: 20px;
+    z-index: 1; /* Make sure the heading is above the table */
+    margin-bottom: 20px; /* Add space below the heading */
+}
+
+.table-wrapper {
+    width: 100%;  /* Full width of the page */
+    height: calc(100vh - 120px); /* Full height minus space for header and button */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding-top: 20px; /* Add space on top to prevent overlap */
+}
+
+table {
+    width: 100%; /* Make the table take up the full width */
+    border-collapse: collapse; /* Ensure borders are collapsed */
+    text-align: left;
+}
+
+table, th, td {
+    border: 1px solid #ddd; /* Add border to the table, th, and td */
+}
+
+th, td {
+    padding: 12px;
+}
+
+th {
+    background-color: #f2f2f2;
+    text-align: center; /* Center-align the headings */
+}
+
+td a {
+    color: red;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+td a:hover {
+    text-decoration: underline;
+}
+
+/* Popup Modal Background */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%;
+    border-radius: 10px;
+}
+
+/* Close Button for Modal */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label, input {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+
+input[type="submit"] {
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}

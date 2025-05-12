@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: url("griet_image.jpg") no-repeat center center;
+            background-size: cover;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+
+        .main-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            margin: 0;
+            width: 100%;
+        }
+
+        .sub-title {
+            text-align: center;
+            font-size: 18px;
+            color: darkorange;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: moveTitle 30s linear infinite;
+            margin-top: 10px;
+        }
+
+        @keyframes moveTitle {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .container {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -30%);
+            background-color: white;
+            width: 80%;
+            max-width: 800px;
+            height: 50%;
+            opacity: 0.9;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto 1fr;
+        }
+
+        .left, .right {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .left {
+            background-color: orange;
+        }
+
+        .right {
+            background-color: #001F3F;
+        }
+
+        .center {
+            grid-column: span 2;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px;
+            color: #FFFFFF;
+            background: linear-gradient(to right, orange 50%, #001F3F 50%);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        input {
+            margin-bottom: 10px;
+            border: 2px solid black;
+            padding: 5px;
+            width: 80%;
+        }
+
+        button {
+            padding: 8px 15px;
+            border: none;
+            background-color: black;
+            color: white;
+            cursor: pointer;
+            width: 80%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .heading {
+            color: white;
+            background-color: black;
+            border-radius: 10px;
+            padding: 5px 10px;
+            display: inline-block;
+        }
+
+        .forgot-link {
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .forgot-link a {
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .forgot-link a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA99ArDKp-x7ZbQHyKK3HuKPKOx6iBJXNg",
+            authDomain: "sample-5a0d8.firebaseapp.com",
+            projectId: "sample-5a0d8",
+            storageBucket: "sample-5a0d8.firebasestorage.app",
+            messagingSenderId: "823285743597",
+            appId: "1:823285743597:web:294631aa43d097b06d71e4",
+            measurementId: "G-YFG5W2VNLN"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Student Login
+        function student() {
+            const username = document.querySelector('.left input[type="text"]').value;
+            const password = document.querySelector('.left input[type="password"]').value;
+
+            signInWithEmailAndPassword(auth, username, password)
+                .then((userCredential) => {
+                    // Redirect to Student Home Page if login is successful
+                    window.location.href = "StudentHomePage.html";
+                })
+                .catch((error) => {
+                    alert("Error: " + error.message);
+                });
+        }
+
+        // Faculty Login
+        function faculty() {
+            const username = document.querySelector('.right input[type="text"]').value;
+            const password = document.querySelector('.right input[type="password"]').value;
+
+            signInWithEmailAndPassword(auth, username, password)
+                .then((userCredential) => {
+                    // Redirect to Faculty Home Page if login is successful
+                    window.location.href = "FacultyHomePage.html";
+                })
+                .catch((error) => {
+                    alert("Error: " + error.message);
+                });
+        }
+
+        // Password Recovery
+        function sendRecovery(type) {
+            const email = type === 'Student'
+                ? document.getElementById('student-email').value
+                : document.getElementById('faculty-email').value;
+
+            if (email) {
+                sendPasswordResetEmail(auth, email)
+                    .then(() => {
+                        alert(`${type} recovery instructions sent to: ${email}`);
+                    })
+                    .catch((error) => {
+                        alert("Error: " + error.message);
+                    });
+            } else {
+                alert(`Please enter your ${type.toLowerCase()} email.`);
+            }
+        }
+
+        // Toggle between login and forgot password sections
+        function showForgot() {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('forgot-section').style.display = 'grid';
+        }
+
+        function showLogin() {
+            document.getElementById('forgot-section').style.display = 'none';
+            document.getElementById('login-section').style.display = 'grid';
+        }
+
+        // Attach event listeners after DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Attach event listeners to the buttons
+            const studentLoginButton = document.querySelector('.left button');
+            const facultyLoginButton = document.querySelector('.right button');
+            
+            studentLoginButton.addEventListener('click', student);
+            facultyLoginButton.addEventListener('click', faculty);
+        });
+    </script>
+
+</head>
+<body>
+
+    <!-- Main Title -->
+    <div class="main-title">Students - Result Management System</div>
+
+    <!-- Subtitle -->
+    <div class="sub-title">Welcome to Griet - Results Management System</div>
+
+    <!-- Login Section -->
+    <div class="container" id="login-section">
+        <div class="center">
+            <span class="heading">Welcome to GRIET Portal</span>
+        </div>
+
+        <!-- Student Login -->
+        <div class="left">
+            <p><b>Student Login</b></p>
+            <input type="text" placeholder="Enter Username">
+            <input type="password" placeholder="Enter Password">
+            <button>Login</button>
+            <div class="forgot-link">
+                <a onclick="showForgot()">Forgot Password?</a>
+            </div>
+        </div>
+
+        <!-- Faculty Login -->
+        <div class="right">
+            <p style="color: white;"><b>Faculty Login</b></p>
+            <input type="text" placeholder="Enter Username">
+            <input type="password" placeholder="Enter Password">
+            <button>Login</button>
+            <div class="forgot-link">
+                <a onclick="showForgot()">Forgot Password?</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Section -->
+    <div class="container" id="forgot-section" style="display: none;">
+        <div class="center">
+            <span class="heading">Welcome to GRIET Portal</span>
+        </div>
+
+        <!-- Student Forgot Password -->
+        <div class="left">
+            <p><b>Student - Forgot Password</b></p>
+            <input type="email" id="student-email" placeholder="Enter student email">
+            <button onclick="sendRecovery('Student')">Recover Student Password</button>
+            <div class="forgot-link">
+                <a onclick="showLogin()">Back to Login</a>
+            </div>
+        </div>
+
+        <!-- Faculty Forgot Password -->
+        <div class="right">
+            <p style="color: white;"><b>Faculty - Forgot Password</b></p>
+            <input type="email" id="faculty-email" placeholder="Enter faculty email">
+            <button onclick="sendRecovery('Faculty')">Recover Faculty Password</button>
+            <div class="forgot-link">
+                <a onclick="showLogin()">Back to Login</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -9,7 +9,7 @@
         }
 
         body {
-            background: url("griet_image.jpg") no-repeat center center;
+            background: url("images/griet_image.jpg") no-repeat center center;
             background-size: cover;
             height: 100vh;
             margin: 0;
@@ -158,7 +158,7 @@
             signInWithEmailAndPassword(auth, username, password)
                 .then((userCredential) => {
                     // Redirect to Student Home Page if login is successful
-                    window.location.href = "StudentHomePage.html";
+                    window.location.href = "html/StudentHomePage.html";
                 })
                 .catch((error) => {
                     alert("Error: " + error.message);
@@ -173,7 +173,7 @@
             signInWithEmailAndPassword(auth, username, password)
                 .then((userCredential) => {
                     // Redirect to Faculty Home Page if login is successful
-                    window.location.href = "FacultyHomePage.html";
+                    window.location.href = "html/FacultyHomePage.html";
                 })
                 .catch((error) => {
                     alert("Error: " + error.message);
@@ -252,7 +252,7 @@
             <p style="color: white;"><b>Faculty Login</b></p>
             <input type="text" placeholder="Enter Username">
             <input type="password" placeholder="Enter Password">
-            <button>Login</button>
+            <button >Login</button>
             <div class="forgot-link">
                 <a onclick="showForgot()">Forgot Password?</a>
             </div>

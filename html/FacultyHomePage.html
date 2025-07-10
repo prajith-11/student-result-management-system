@@ -41,7 +41,7 @@
     <div id="dashboard" class="section active">
       <h3>Faculty Profile</h3>
       <div class="profile-container">
-        <img class="profile-img" src="Faculty_pic.jpg" alt="Faculty Photo">
+        <img class="profile-img" src="../images/Faculty_pic.jpg" alt="Faculty Photo">
         <div class="profile-details">
           <p><strong>Staff Id:</strong> 22A91A0512</p>
           <p><strong>Name:</strong> P. Deepthi</p>
@@ -192,7 +192,7 @@
   function goToClass(className) {
     closeModal('classModal');
     if (className === 'A') {
-      window.location.href = 'http://localhost/SRP/subjectMarks.php';
+      window.location.href = 'http://localhost/student-result-management-system/php/subjectMarks.php';
     } else {
       alert('Navigation for Class ' + className + ' not implemented.');
     }
@@ -201,14 +201,14 @@
   function goToMarksClass(className) {
     closeModal('marksModal');
     if (className === 'A') {
-      window.location.href = 'http://localhost/SRP/facultyMarks.php';
+      window.location.href = 'http://localhost/student-result-management-system/php/facultyMarks.php';
     } else {
       alert('Marks entry for Class ' + className + ' not implemented.');
     }
   }
 
   function logout() {
-    window.location.href = "LoginPage.html";
+    window.location.href = "../index.html";
   }
 
   generateData();

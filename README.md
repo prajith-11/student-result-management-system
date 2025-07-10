@@ -75,3 +75,9 @@ Special thanks to:
 ## 📌 License
 
 This project is for educational purposes only.
+
+To login,
+- Username = sample@user.com
+- Password = 123456
+
+Please note, you may not be able to run a few pages because they are coded in php. This is cause the pages are dynamic and not supported by GitHub.
